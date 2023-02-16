@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм»
 
-* Студент: [Valerie Kravtsova](https://up.htmlacademy.ru/javascript/28/user/1869163).
-* Наставник: `Неизвестно`.
+- Студент: [Valerie Kravtsova](https://up.htmlacademy.ru/javascript/28/user/1869163).
+- Наставник: [Олег Глущенко](https://htmlacademy.ru/profile/id305355).
 
 ---
 

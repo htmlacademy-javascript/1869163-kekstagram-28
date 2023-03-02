@@ -1,15 +1,13 @@
-function isLong(str, maxLength) {
-  return str.length <= maxLength;
-}
+const isLong = (str, maxLength) => str.length <= maxLength;
 
-function isPalindrome(str) {
+const isPalindrome = (str) => {
   const noSpace = str.replace(/\s/g, '');
   const lower = noSpace.toLowerCase();
   const reverseStr = lower.split('').reverse('').join('');
   return lower === reverseStr;
-}
+};
 
-function findNumber(str) {
+const findNumber = (str) => {
   if (!isNaN(str)) {
     const positiveNumber = Math.abs(str);
     return positiveNumber;
@@ -22,9 +20,9 @@ function findNumber(str) {
     return noDigit;
   }
   return onlyNumbers;
-}
+};
 
-function createPad(str, minLength, pad) {
+const createPad = (str, minLength, pad) => {
   while (str.length < minLength) {
     const newStringLength = str.length + pad.length;
     const actualPad =
@@ -34,4 +32,4 @@ function createPad(str, minLength, pad) {
     str = actualPad + str;
   }
   return str;
-}
+};

@@ -67,6 +67,6 @@ const createPost = (id, index) => ({
 
 const postIds = getShuffledIds(1, POSTS_AMOUNT);
 
-const createPosts = postIds.map((id, index) => createPost(id, index));
+const posts = postIds.map((id, index) => createPost(id, index));
 
-export { createPosts };
+export { posts };

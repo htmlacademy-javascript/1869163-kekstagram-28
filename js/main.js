@@ -1,4 +1,3 @@
 import './util.js';
-import { createPosts } from './data.js';
-
-console.log(createPosts);
+import './data.js';
+import './miniature.js';

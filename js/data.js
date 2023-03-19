@@ -1,7 +1,7 @@
 import { getRandomInteger } from './util.js';
 import { getRandomArrayElement } from './util.js';
 
-const COMMENTS_AMOUNT = 5;
+const MAX_COMMENTS_AMOUNT = 25;
 const POSTS_AMOUNT = 25;
 const AVATARS_AMOUNT = 6;
 const LIKES_MIN = 15;
@@ -52,7 +52,7 @@ const createComment = (id) => ({
 const createNewCommentSection = (firstCommentId) => {
   const commentsIds = getShuffledIds(
     firstCommentId,
-    firstCommentId + COMMENTS_AMOUNT - 1
+    firstCommentId + getRandomInteger(5, MAX_COMMENTS_AMOUNT - 1)
   );
   return commentsIds.map((id) => createComment(id));
 };
@@ -62,7 +62,7 @@ const createPost = (id, index) => ({
   url: getPostUrl(),
   description: getRandomArrayElement(DESCRIPTIONS),
   likes: getNumberOfLikes(),
-  comments: createNewCommentSection(index * COMMENTS_AMOUNT),
+  comments: createNewCommentSection(index * MAX_COMMENTS_AMOUNT),
 });
 
 const postIds = getShuffledIds(1, POSTS_AMOUNT);

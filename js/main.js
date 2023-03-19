@@ -1,3 +1,2 @@
-import './util.js';
-import './data.js';
 import './miniature.js';
+import './big-picture.js';

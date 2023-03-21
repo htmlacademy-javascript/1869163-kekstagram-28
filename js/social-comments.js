@@ -1,3 +1,27 @@
+const MAX_NUMBER_OF_COMMENTS = 5;
+let numberOfComments = 0;
+let currentCommentSection = 0;
+
+const getIsLastSection = () =>
+  currentCommentSection + 1 >
+  Math.floor(numberOfComments / MAX_NUMBER_OF_COMMENTS);
+
+const incrementCounterIndex = () => {
+  if (getIsLastSection()) {
+    return;
+  }
+  currentCommentSection++;
+};
+
+const resetCounter = () => {
+  numberOfComments = 0;
+  currentCommentSection = 0;
+};
+
+const initCounter = (comments) => {
+  numberOfComments = comments.length;
+};
+
 const createSocialComment = (avatarUrl, name, text) => {
   const div = document.createElement('div');
   div.innerHTML = `<li class="social__comment">
@@ -11,4 +35,12 @@ const createSocialComment = (avatarUrl, name, text) => {
   return div.children[0];
 };
 
-export { createSocialComment };
+export {
+  createSocialComment,
+  currentCommentSection,
+  MAX_NUMBER_OF_COMMENTS,
+  incrementCounterIndex,
+  resetCounter,
+  initCounter,
+  getIsLastSection,
+};

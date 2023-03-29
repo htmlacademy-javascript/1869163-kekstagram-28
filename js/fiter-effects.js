@@ -83,3 +83,11 @@ noUiSlider.create(sliderElement, {
 hideSlider();
 
 sliderElement.noUiSlider.on('update', onSliderUpdate);
+
+const resetEffects = () => {
+  chosenEffect = DEFAULT_EFFECT;
+  imgPreview.className = '';
+  updateSlider();
+};
+
+export { resetEffects };

@@ -35,5 +35,13 @@ const onBiggerButtonClick = () => {
   scaleImg();
 };
 
+const resetScale = () => {
+  scaleValueNumber = DEFAULT_SCALE_VALUE;
+  imgPreview.style.transform = `scale(${Number(scaleValueNumber) / 100})`;
+  updateScaleInput();
+};
+
 scaleButtonSmaller.addEventListener('click', onSmallerButtonClick);
 scaleButtonBigger.addEventListener('click', onBiggerButtonClick);
+
+export { resetScale };

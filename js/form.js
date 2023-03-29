@@ -1,7 +1,15 @@
+import { postData } from './api.js';
+import { resetEffects } from './fiter-effects.js';
+import { resetScale } from './scale-img.js';
 import { isEscapeKey } from './util.js';
 
 const HASHTAG_ERROR_TEXT = 'Неправильный формат хештегов';
 const VALID_FORMAT = /^(#[а-яА-Я\w]{1,19}( +#[а-яА-Я\w]{1,19}){0,4})?$/i;
+
+const SubmitButtonText = {
+  IDLE: 'Опубликовать',
+  SENDING: 'Публикую...',
+};
 
 const body = document.body;
 const imgUploadWindow = document.querySelector('.img-upload');
@@ -9,7 +17,8 @@ const imgUploadInput = imgUploadWindow.querySelector('#upload-file');
 const imgEditor = imgUploadWindow.querySelector('.img-upload__overlay');
 const imgEditorCloseElement = imgUploadWindow.querySelector('#upload-cancel');
 const form = imgUploadWindow.querySelector('.img-upload__form');
-const hashtagField = imgUploadWindow.querySelector('.text__hashtags');
+const hashtagsInput = imgUploadWindow.querySelector('.text__hashtags');
+const submitButton = imgUploadWindow.querySelector('.img-upload__submit');
 
 const pristine = new Pristine(form, {
   classTo: 'img-upload__field-wrapper',
@@ -34,17 +43,21 @@ const validate = (inputValue) => {
   return isValidHashtag(inputValue) && isUniqueHashtags(hashtagsArray);
 };
 
-pristine.addValidator(hashtagField, validate, HASHTAG_ERROR_TEXT);
+pristine.addValidator(hashtagsInput, validate, HASHTAG_ERROR_TEXT);
 
-const onHashtagFieldKeydown = (evt) => {
+const onHashtagsInputKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.stopPropagation();
   }
 };
 
-hashtagField.addEventListener('keydown', onHashtagFieldKeydown);
+hashtagsInput.addEventListener('keydown', onHashtagsInputKeydown);
 
 const onKeydown = (evt) => {
+  const errorModal = document.querySelector('.error');
+  if (errorModal) {
+    return;
+  }
   if (isEscapeKey(evt)) {
     evt.preventDefault();
     closeImgUploadWindow();
@@ -62,13 +75,35 @@ function closeImgUploadWindow() {
   body.classList.remove('modal-open');
   imgUploadInput.value = '';
 
+  resetEffects();
+  resetScale();
+
   document.removeEventListener('keydown', onKeydown);
-  hashtagField.removeEventListener('keydown', onHashtagFieldKeydown);
+  hashtagsInput.removeEventListener('keydown', onHashtagsInputKeydown);
 }
 
 imgEditorCloseElement.addEventListener('click', closeImgUploadWindow);
 
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = SubmitButtonText.SENDING;
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = SubmitButtonText.IDLE;
+};
+
 form.addEventListener('submit', (evt) => {
   evt.preventDefault();
-  pristine.validate();
+  const isValid = pristine.validate();
+  if (!isValid) {
+    blockSubmitButton();
+    return;
+  }
+  unblockSubmitButton();
+  const formData = new FormData(form);
+  postData(formData);
 });
+
+export { closeImgUploadWindow };

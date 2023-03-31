@@ -1,5 +1,6 @@
-import { updatePosts } from './data.js';
+import { updatePosts, updateInitPosts } from './data.js';
 import { closeImgUploadWindow } from './form.js';
+import { showPostsFilter } from './images-filter.js';
 import {
   showModal,
   successModalTemplate,
@@ -18,7 +19,11 @@ const initApp = () => {
       }
       return response.json();
     })
-    .then((posts) => updatePosts(posts))
+    .then((posts) => {
+      updateInitPosts(posts);
+      updatePosts(posts);
+      showPostsFilter();
+    })
     .catch(() => showAlert('ERROR'));
 };
 

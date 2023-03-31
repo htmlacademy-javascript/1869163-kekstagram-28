@@ -77,6 +77,7 @@ function closeImgUploadWindow() {
 
   resetEffects();
   resetScale();
+  form.reset();
 
   document.removeEventListener('keydown', onKeydown);
   hashtagsInput.removeEventListener('keydown', onHashtagsInputKeydown);

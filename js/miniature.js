@@ -8,6 +8,9 @@ const miniaturesTemplate = document
 const miniatureListFragment = document.createDocumentFragment();
 
 const renderPosts = () => {
+  const allCurrentPosts = document.querySelectorAll('.picture');
+  allCurrentPosts.forEach((post) => post.remove());
+
   posts.forEach(({ url, comments, likes }, index) => {
     const miniatureElement = miniaturesTemplate.cloneNode(true);
     miniatureElement.querySelector('.picture__img').src = url;

@@ -85,6 +85,7 @@ hideSlider();
 sliderElement.noUiSlider.on('update', onSliderUpdate);
 
 const resetEffects = () => {
+  effectRadioButtons[0].checked = true;
   chosenEffect = DEFAULT_EFFECT;
   imgPreview.className = '';
   updateSlider();

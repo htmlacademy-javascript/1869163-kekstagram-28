@@ -76,10 +76,12 @@ function updateComments() {
   commentsUl.append(...commentsLiCollection);
 
   socialCommentCountStartSpan.textContent =
-    (currentCommentSection + 1) * MAX_NUMBER_OF_COMMENTS +
-    (getIsLastSection()
-      ? (comments.length % MAX_NUMBER_OF_COMMENTS) - MAX_NUMBER_OF_COMMENTS
-      : 0);
+    (currentCommentSection +
+      (getIsLastSection() && comments.length % MAX_NUMBER_OF_COMMENTS
+        ? 0
+        : 1)) *
+      MAX_NUMBER_OF_COMMENTS +
+    (getIsLastSection() ? comments.length % MAX_NUMBER_OF_COMMENTS : 0);
 
   if (getIsLastSection()) {
     nextButton.classList.add('hidden');

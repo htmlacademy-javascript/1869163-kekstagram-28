@@ -3,8 +3,8 @@ let numberOfComments = 0;
 let currentCommentSection = 0;
 
 const getIsLastSection = () =>
-  currentCommentSection + 1 >
-  Math.floor(numberOfComments / MAX_NUMBER_OF_COMMENTS);
+  currentCommentSection + 1 >=
+  Math.ceil(numberOfComments / MAX_NUMBER_OF_COMMENTS);
 
 const incrementCounterIndex = () => {
   if (getIsLastSection()) {

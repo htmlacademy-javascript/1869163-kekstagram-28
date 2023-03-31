@@ -37,7 +37,7 @@ const onBiggerButtonClick = () => {
 
 const resetScale = () => {
   scaleValueNumber = DEFAULT_SCALE_VALUE;
-  imgPreview.style.transform = `scale(${Number(scaleValueNumber) / 100})`;
+  scaleImg();
   updateScaleInput();
 };
 

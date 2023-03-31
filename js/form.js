@@ -18,7 +18,9 @@ const imgEditor = imgUploadWindow.querySelector('.img-upload__overlay');
 const imgEditorCloseElement = imgUploadWindow.querySelector('#upload-cancel');
 const form = imgUploadWindow.querySelector('.img-upload__form');
 const hashtagsInput = imgUploadWindow.querySelector('.text__hashtags');
+const textArea = imgUploadWindow.querySelector('.text__description');
 const submitButton = imgUploadWindow.querySelector('.img-upload__submit');
+const errorModal = document.querySelector('.error');
 
 const pristine = new Pristine(form, {
   classTo: 'img-upload__field-wrapper',
@@ -26,6 +28,16 @@ const pristine = new Pristine(form, {
   errorTextTag: 'span',
   errorTextClass: 'img-upload__field-wrapper--error',
 });
+
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = SubmitButtonText.SENDING;
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = SubmitButtonText.IDLE;
+};
 
 const isValidHashtag = (inputValue) => VALID_FORMAT.test(inputValue);
 
@@ -45,16 +57,13 @@ const validate = (inputValue) => {
 
 pristine.addValidator(hashtagsInput, validate, HASHTAG_ERROR_TEXT);
 
-const onHashtagsInputKeydown = (evt) => {
+const onTextFieldKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.stopPropagation();
   }
 };
 
-hashtagsInput.addEventListener('keydown', onHashtagsInputKeydown);
-
 const onKeydown = (evt) => {
-  const errorModal = document.querySelector('.error');
   if (errorModal) {
     return;
   }
@@ -65,6 +74,13 @@ const onKeydown = (evt) => {
 };
 
 imgUploadInput.addEventListener('change', () => {
+  resetScale();
+  pristine.validate();
+  unblockSubmitButton();
+
+  hashtagsInput.addEventListener('keydown', onTextFieldKeydown);
+  textArea.addEventListener('keydown', onTextFieldKeydown);
+
   imgEditor.classList.remove('hidden');
   body.classList.add('modal-open');
   document.addEventListener('keydown', onKeydown);
@@ -76,35 +92,27 @@ function closeImgUploadWindow() {
   imgUploadInput.value = '';
 
   resetEffects();
-  resetScale();
   form.reset();
 
   document.removeEventListener('keydown', onKeydown);
-  hashtagsInput.removeEventListener('keydown', onHashtagsInputKeydown);
+  hashtagsInput.removeEventListener('keydown', onTextFieldKeydown);
+  textArea.removeEventListener('keydown', onTextFieldKeydown);
 }
 
 imgEditorCloseElement.addEventListener('click', closeImgUploadWindow);
 
-const blockSubmitButton = () => {
-  submitButton.disabled = true;
-  submitButton.textContent = SubmitButtonText.SENDING;
-};
-
-const unblockSubmitButton = () => {
-  submitButton.disabled = false;
-  submitButton.textContent = SubmitButtonText.IDLE;
-};
-
 form.addEventListener('submit', (evt) => {
   evt.preventDefault();
+
   const isValid = pristine.validate();
+
   if (!isValid) {
-    blockSubmitButton();
     return;
   }
-  unblockSubmitButton();
+
+  blockSubmitButton();
   const formData = new FormData(form);
   postData(formData);
 });
 
-export { closeImgUploadWindow };
+export { closeImgUploadWindow, unblockSubmitButton };

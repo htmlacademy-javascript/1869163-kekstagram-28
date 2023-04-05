@@ -4,7 +4,7 @@ import { resetScale } from './scale-img.js';
 import { isEscapeKey } from './util.js';
 
 const HASHTAG_ERROR_TEXT = 'Неправильный формат хештегов';
-const VALID_FORMAT = /^(#[а-яА-Я\w]{1,19}( +#[а-яА-Я\w]{1,19}){0,4})?$/i;
+const VALID_FORMAT = /^(#[а-яА-Я\w]{1,19}( +#[а-яА-Я\w]{1,19}){0,4} *)?$/i;
 
 const SubmitButtonText = {
   IDLE: 'Опубликовать',
@@ -104,6 +104,7 @@ imgEditorCloseElement.addEventListener('click', closeImgUploadWindow);
 form.addEventListener('submit', (evt) => {
   evt.preventDefault();
 
+  hashtagsInput.value = hashtagsInput.value.trim();
   const isValid = pristine.validate();
 
   if (!isValid) {

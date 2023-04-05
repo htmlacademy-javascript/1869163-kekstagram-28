@@ -57,7 +57,7 @@ const openBigPicture = (url, likesCount, commentsCount, description) => {
   document.addEventListener('keydown', onKeydown);
 };
 
-function updateComments() {
+function updateComments(clearBeforeRender = false) {
   const { url, likes, comments, description } = post;
   initCounter(comments);
   openBigPicture(url, likes, comments.length, description);
@@ -71,7 +71,9 @@ function updateComments() {
       createSocialComment(avatar, name, message)
     );
 
-  commentsUl.innerHTML = '';
+  if (clearBeforeRender) {
+    commentsUl.innerHTML = '';
+  }
 
   commentsUl.append(...commentsLiCollection);
 
@@ -105,7 +107,7 @@ picturesBlock.addEventListener('click', (evt) => {
     return;
   }
   post = posts[a.dataset.index];
-  updateComments(post);
+  updateComments(true);
 });
 
 bigPictureCloseElement.addEventListener('click', closeBigPicture);

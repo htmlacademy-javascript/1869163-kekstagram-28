@@ -11,15 +11,22 @@ import {
 } from './social-comments.js';
 
 const body = document.body;
-const bigPictureElement = document.querySelector('.big-picture');
+const bigPictureSection = document.querySelector('.big-picture');
 const picturesBlock = document.querySelector('.pictures');
-const bigPictureCloseElement = bigPictureElement.querySelector(
+const bigPictureCloseElement = bigPictureSection.querySelector(
   '.big-picture__cancel'
 );
-const socialCommentCountStartSpan = bigPictureElement.querySelector(
+const bigPictureImg = bigPictureSection.querySelector('.big-picture__img img');
+const bigPictureLikesCount = bigPictureSection.querySelector('.likes-count');
+const bigPictureCommentsCount =
+  bigPictureSection.querySelector('.comments-count');
+const bigPictureDescription =
+  bigPictureSection.querySelector('.social__caption');
+const commentsUl = bigPictureSection.querySelector('.social__comments');
+const socialCommentCountStartSpan = bigPictureSection.querySelector(
   '.social__comment-count-start'
 );
-const nextButton = bigPictureElement.querySelector('.social__comments-loader');
+const nextButton = bigPictureSection.querySelector('.social__comments-loader');
 
 let post = null;
 
@@ -36,26 +43,25 @@ const onKeydown = (evt) => {
 };
 
 const openBigPicture = (url, likesCount, commentsCount, description) => {
-  bigPictureElement.classList.remove('hidden');
+  bigPictureSection.classList.remove('hidden');
+  nextButton.classList.remove('hidden');
   body.classList.add('modal-open');
 
-  bigPictureElement.querySelector('.big-picture__img img').src = url;
-  bigPictureElement.querySelector('.likes-count').textContent = likesCount;
-  bigPictureElement.querySelector('.comments-count').textContent =
-    commentsCount;
-  bigPictureElement.querySelector('.social__caption').textContent = description;
+  bigPictureImg.src = url;
+  bigPictureLikesCount.textContent = likesCount;
+  bigPictureCommentsCount.textContent = commentsCount;
+  bigPictureDescription.textContent = description;
 
   nextButton.addEventListener('click', onNextButtonClick);
 
   document.addEventListener('keydown', onKeydown);
 };
 
-function updateComments() {
+function updateComments(clearBeforeRender = false) {
   const { url, likes, comments, description } = post;
   initCounter(comments);
   openBigPicture(url, likes, comments.length, description);
 
-  const commentsUl = bigPictureElement.querySelector('.social__comments');
   const commentsLiCollection = post.comments
     .slice(
       currentCommentSection * MAX_NUMBER_OF_COMMENTS,
@@ -65,19 +71,27 @@ function updateComments() {
       createSocialComment(avatar, name, message)
     );
 
-  commentsUl.innerHTML = '';
+  if (clearBeforeRender) {
+    commentsUl.innerHTML = '';
+  }
 
   commentsUl.append(...commentsLiCollection);
 
   socialCommentCountStartSpan.textContent =
-    (currentCommentSection + 1) * MAX_NUMBER_OF_COMMENTS +
-    (getIsLastSection()
-      ? (comments.length % MAX_NUMBER_OF_COMMENTS) - MAX_NUMBER_OF_COMMENTS
-      : 0);
+    (currentCommentSection +
+      (getIsLastSection() && comments.length % MAX_NUMBER_OF_COMMENTS
+        ? 0
+        : 1)) *
+      MAX_NUMBER_OF_COMMENTS +
+    (getIsLastSection() ? comments.length % MAX_NUMBER_OF_COMMENTS : 0);
+
+  if (getIsLastSection()) {
+    nextButton.classList.add('hidden');
+  }
 }
 
 function closeBigPicture() {
-  bigPictureElement.classList.add('hidden');
+  bigPictureSection.classList.add('hidden');
   body.classList.remove('modal-open');
   nextButton.removeEventListener('click', onNextButtonClick);
   post = null;
@@ -93,7 +107,7 @@ picturesBlock.addEventListener('click', (evt) => {
     return;
   }
   post = posts[a.dataset.index];
-  updateComments(post);
+  updateComments(true);
 });
 
 bigPictureCloseElement.addEventListener('click', closeBigPicture);

@@ -1,11 +1,7 @@
 import { updatePosts, updateInitPosts } from './data.js';
 import { closeImgUploadWindow } from './form.js';
 import { showPostsFilter } from './images-filter.js';
-import {
-  showModal,
-  successModalTemplate,
-  errorModalTemplate,
-} from './modals.js';
+import { showModalSuccess, showModalError } from './modals.js';
 import { showAlert } from './util.js';
 
 const GET_URL = 'https://28.javascript.pages.academy/kekstagram/data';
@@ -24,12 +20,12 @@ const initApp = () => {
       updatePosts(posts);
       showPostsFilter();
     })
-    .catch(() => showAlert('ERROR'));
+    .catch(() => showAlert('SOMETHING WENT WRONG TRY RELOADING THE PAGE'));
 };
 
 const onSuccess = () => {
   closeImgUploadWindow();
-  showModal(successModalTemplate);
+  showModalSuccess();
 };
 
 const postData = (formData) => {
@@ -41,11 +37,11 @@ const postData = (formData) => {
       if (response.ok) {
         onSuccess();
       } else {
-        showModal(errorModalTemplate);
+        showModalError();
       }
     })
     .catch(() => {
-      showModal(errorModalTemplate);
+      showModalError();
     });
 };
 

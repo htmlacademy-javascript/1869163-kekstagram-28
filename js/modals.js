@@ -1,4 +1,5 @@
 import { isEscapeKey } from './util.js';
+import { unblockSubmitButton } from './form.js';
 
 const successModalTemplate = document
   .querySelector('#success')
@@ -15,30 +16,43 @@ const errorModalButton = errorModalTemplate.querySelector('.error__button');
 const successWindow = successModalTemplate.querySelector('.success__inner');
 const errorWindow = errorModalTemplate.querySelector('.error__inner');
 
-function closeModal(template) {
-  template.remove();
-
-  document.removeEventListener('keydown', (evt) => {
-    if (isEscapeKey(evt)) {
-      evt.preventDefault();
-      closeModal(template);
-    }
-  });
-}
-
-const showModal = (template) => {
-  document.body.append(template);
-
-  document.addEventListener('keydown', (evt) => {
-    if (isEscapeKey(evt)) {
-      evt.preventDefault();
-      closeModal(template);
-    }
-  });
+const onKeydown = (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    evt.stopPropagation();
+    closeModalError();
+    closeModalSuccess();
+  }
 };
 
-const onErrorModalClose = () => closeModal(errorModalTemplate);
-const onSuccessModalClose = () => closeModal(successModalTemplate);
+function closeModalError() {
+  errorModalTemplate.remove();
+  unblockSubmitButton();
+
+  document.removeEventListener('keydown', onKeydown);
+}
+
+function closeModalSuccess() {
+  successModalTemplate.remove();
+  unblockSubmitButton();
+
+  document.removeEventListener('keydown', onKeydown);
+}
+
+const showModalError = () => {
+  document.body.append(errorModalTemplate);
+
+  document.addEventListener('keydown', onKeydown);
+};
+
+const showModalSuccess = () => {
+  document.body.append(successModalTemplate);
+
+  document.addEventListener('keydown', onKeydown);
+};
+
+const onErrorModalClose = () => closeModalError(errorModalTemplate);
+const onSuccessModalClose = () => closeModalSuccess(successModalTemplate);
 
 successModalButton.addEventListener('click', onSuccessModalClose);
 successModalTemplate.addEventListener('click', onSuccessModalClose);
@@ -52,4 +66,9 @@ errorWindow.addEventListener('click', (evt) => {
   evt.stopPropagation();
 });
 
-export { showModal, successModalTemplate, errorModalTemplate };
+export {
+  showModalError,
+  showModalSuccess,
+  successModalTemplate,
+  errorModalTemplate,
+};

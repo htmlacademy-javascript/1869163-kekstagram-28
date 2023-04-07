@@ -9,6 +9,7 @@ const miniatureListFragment = document.createDocumentFragment();
 
 const getMiniatureElement = ({ url, comments, likes, index }) => {
   const miniatureElement = miniaturesTemplate.cloneNode(true);
+
   miniatureElement.querySelector('.picture__img').src = url;
   miniatureElement.querySelector('.picture__comments').textContent =
     comments.length;

@@ -1,5 +1,5 @@
 import { updatePosts, updateInitPosts } from './data.js';
-import { closeImgUploadWindow } from './form.js';
+import { onImgEditorClose } from './form.js';
 import { showPostsFilter } from './images-filter.js';
 import { showModalSuccess, showModalError } from './modals.js';
 import { showAlert } from './util.js';
@@ -24,7 +24,7 @@ const initApp = () => {
 };
 
 const onSuccess = () => {
-  closeImgUploadWindow();
+  onImgEditorClose();
   showModalSuccess();
 };
 

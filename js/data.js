@@ -3,6 +3,8 @@ import { renderPosts } from './miniature.js';
 let initPosts = [];
 let posts = [];
 
+const getPosts = () => posts;
+
 const updatePosts = (newPosts) => {
   posts = newPosts;
   renderPosts();
@@ -22,4 +24,4 @@ const sortPosts = () => {
 
 const setPostsToDefault = () => updatePosts(initPosts);
 
-export { posts, updatePosts, updateInitPosts, setPostsToDefault, sortPosts };
+export { getPosts, updatePosts, updateInitPosts, setPostsToDefault, sortPosts };

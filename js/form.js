@@ -20,7 +20,6 @@ const form = imgUploadWindow.querySelector('.img-upload__form');
 const hashtagsInput = imgUploadWindow.querySelector('.text__hashtags');
 const textArea = imgUploadWindow.querySelector('.text__description');
 const submitButton = imgUploadWindow.querySelector('.img-upload__submit');
-const errorModal = document.querySelector('.error');
 
 const pristine = new Pristine(form, {
   classTo: 'img-upload__field-wrapper',
@@ -63,13 +62,16 @@ const onTextFieldKeydown = (evt) => {
   }
 };
 
-const onKeydown = (evt) => {
-  if (errorModal) {
+const onDocumentKeydown = (evt) => {
+  const isErrorModal = document.querySelector('.error');
+
+  if (isErrorModal) {
     return;
   }
+
   if (isEscapeKey(evt)) {
     evt.preventDefault();
-    closeImgUploadWindow();
+    onImgEditorClose();
   }
 };
 
@@ -83,10 +85,10 @@ imgUploadInput.addEventListener('change', () => {
 
   imgEditor.classList.remove('hidden');
   body.classList.add('modal-open');
-  document.addEventListener('keydown', onKeydown);
+  document.addEventListener('keydown', onDocumentKeydown);
 });
 
-function closeImgUploadWindow() {
+function onImgEditorClose() {
   imgEditor.classList.add('hidden');
   body.classList.remove('modal-open');
   imgUploadInput.value = '';
@@ -94,12 +96,12 @@ function closeImgUploadWindow() {
   resetEffects();
   form.reset();
 
-  document.removeEventListener('keydown', onKeydown);
+  document.removeEventListener('keydown', onDocumentKeydown);
   hashtagsInput.removeEventListener('keydown', onTextFieldKeydown);
   textArea.removeEventListener('keydown', onTextFieldKeydown);
 }
 
-imgEditorCloseElement.addEventListener('click', closeImgUploadWindow);
+imgEditorCloseElement.addEventListener('click', onImgEditorClose);
 
 form.addEventListener('submit', (evt) => {
   evt.preventDefault();
@@ -116,4 +118,4 @@ form.addEventListener('submit', (evt) => {
   postData(formData);
 });
 
-export { closeImgUploadWindow, unblockSubmitButton };
+export { onImgEditorClose, unblockSubmitButton };

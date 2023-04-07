@@ -1,4 +1,5 @@
 const ALERT_SHOW_TIME = 5000;
+const DEFAULT_SCALE_VALUE = 100;
 
 const shuffle = (array) =>
   array.length > 0 ? [...array].sort(() => Math.random() - 0.5) : [];
@@ -37,4 +38,11 @@ const debounce = (callback, timeoutDelay) => {
   };
 };
 
-export { isEscapeKey, showAlert, shuffle, extractSubArray, debounce };
+export {
+  isEscapeKey,
+  showAlert,
+  shuffle,
+  extractSubArray,
+  debounce,
+  DEFAULT_SCALE_VALUE,
+};

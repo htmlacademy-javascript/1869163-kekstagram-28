@@ -16,10 +16,9 @@ const errorModalButton = errorModalTemplate.querySelector('.error__button');
 const successWindow = successModalTemplate.querySelector('.success__inner');
 const errorWindow = errorModalTemplate.querySelector('.error__inner');
 
-const onKeydown = (evt) => {
+const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
-    evt.stopPropagation();
     closeModalError();
     closeModalSuccess();
   }
@@ -29,26 +28,26 @@ function closeModalError() {
   errorModalTemplate.remove();
   unblockSubmitButton();
 
-  document.removeEventListener('keydown', onKeydown);
+  document.removeEventListener('keydown', onDocumentKeydown);
 }
 
 function closeModalSuccess() {
   successModalTemplate.remove();
   unblockSubmitButton();
 
-  document.removeEventListener('keydown', onKeydown);
+  document.removeEventListener('keydown', onDocumentKeydown);
 }
 
 const showModalError = () => {
   document.body.append(errorModalTemplate);
 
-  document.addEventListener('keydown', onKeydown);
+  document.addEventListener('keydown', onDocumentKeydown);
 };
 
 const showModalSuccess = () => {
   document.body.append(successModalTemplate);
 
-  document.addEventListener('keydown', onKeydown);
+  document.addEventListener('keydown', onDocumentKeydown);
 };
 
 const onErrorModalClose = () => closeModalError(errorModalTemplate);

@@ -2,6 +2,8 @@ const MAX_NUMBER_OF_COMMENTS = 5;
 let numberOfComments = 0;
 let currentCommentSection = 0;
 
+const getCurrentCommentSection = () => currentCommentSection;
+
 const getIsLastSection = () =>
   currentCommentSection + 1 >=
   Math.ceil(numberOfComments / MAX_NUMBER_OF_COMMENTS);
@@ -23,21 +25,24 @@ const initCounter = (comments) => {
 };
 
 const createSocialComment = (avatarUrl, name, text) => {
-  const div = document.createElement('div');
-  div.innerHTML = `<li class="social__comment">
+  const temporarySocialCommentWrapper = document.createElement('div');
+  temporarySocialCommentWrapper.innerHTML = `<li class="social__comment">
     <img
         class="social__picture"
         src="${avatarUrl}"
         alt="${name}"
         width="35" height="35">
-    <p class="social__text">${text}</p>
+    <p class="social__text"></p>
 </li>`;
-  return div.children[0];
+  const socialComment = temporarySocialCommentWrapper.children[0];
+  socialComment.querySelector('p').textContent = text;
+
+  return socialComment;
 };
 
 export {
   createSocialComment,
-  currentCommentSection,
+  getCurrentCommentSection,
   MAX_NUMBER_OF_COMMENTS,
   incrementCounterIndex,
   resetCounter,

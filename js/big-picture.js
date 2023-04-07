@@ -1,8 +1,8 @@
 import { isEscapeKey } from './util.js';
-import { posts } from './data.js';
+import { getPosts } from './data.js';
 import {
   createSocialComment,
-  currentCommentSection,
+  getCurrentCommentSection,
   MAX_NUMBER_OF_COMMENTS,
   resetCounter,
   incrementCounterIndex,
@@ -35,7 +35,7 @@ const onNextButtonClick = () => {
   updateComments();
 };
 
-const onKeydown = (evt) => {
+const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
     closeBigPicture();
@@ -54,7 +54,7 @@ const openBigPicture = (url, likesCount, commentsCount, description) => {
 
   nextButton.addEventListener('click', onNextButtonClick);
 
-  document.addEventListener('keydown', onKeydown);
+  document.addEventListener('keydown', onDocumentKeydown);
 };
 
 function updateComments(clearBeforeRender = false) {
@@ -64,8 +64,8 @@ function updateComments(clearBeforeRender = false) {
 
   const commentsLiCollection = post.comments
     .slice(
-      currentCommentSection * MAX_NUMBER_OF_COMMENTS,
-      (currentCommentSection + 1) * MAX_NUMBER_OF_COMMENTS
+      getCurrentCommentSection() * MAX_NUMBER_OF_COMMENTS,
+      (getCurrentCommentSection() + 1) * MAX_NUMBER_OF_COMMENTS
     )
     .map(({ avatar, name, message }) =>
       createSocialComment(avatar, name, message)
@@ -78,7 +78,7 @@ function updateComments(clearBeforeRender = false) {
   commentsUl.append(...commentsLiCollection);
 
   socialCommentCountStartSpan.textContent =
-    (currentCommentSection +
+    (getCurrentCommentSection() +
       (getIsLastSection() && comments.length % MAX_NUMBER_OF_COMMENTS
         ? 0
         : 1)) *
@@ -98,15 +98,15 @@ function closeBigPicture() {
   resetCounter();
   socialCommentCountStartSpan.textContent = 5;
 
-  document.removeEventListener('keydown', onKeydown);
+  document.removeEventListener('keydown', onDocumentKeydown);
 }
 
 picturesBlock.addEventListener('click', (evt) => {
-  const a = evt.target.closest('a');
-  if (!a) {
+  const postPreviewAnchor = evt.target.closest('a');
+  if (!postPreviewAnchor) {
     return;
   }
-  post = posts[a.dataset.index];
+  post = getPosts()[postPreviewAnchor.dataset.index];
   updateComments(true);
 });
 

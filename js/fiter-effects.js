@@ -1,14 +1,15 @@
-const EFFECTS = [
-  { name: 'none', style: 'none', min: 0, max: 100, step: 1, unit: '' },
-  { name: 'chrome', style: 'grayscale', min: 0, max: 1, step: 0.1, unit: '' },
-  { name: 'sepia', style: 'sepia', min: 0, max: 1, step: 0.1, unit: '' },
-  { name: 'marvin', style: 'invert', min: 0, max: 100, step: 1, unit: '%' },
-  { name: 'phobos', style: 'blur', min: 0, max: 3, step: 0.1, unit: 'px' },
-  { name: 'heat', style: 'brightness', min: 1, max: 3, step: 0.1, unit: '' },
-];
+import { DEFAULT_SCALE_VALUE } from './util.js';
 
-const DEFAULT_EFFECT = EFFECTS[0];
-let chosenEffect = DEFAULT_EFFECT;
+const EFFECTS = {
+  none: { style: 'none', min: 0, max: 100, step: 1, unit: '' },
+  chrome: { style: 'grayscale', min: 0, max: 1, step: 0.1, unit: '' },
+  sepia: { style: 'sepia', min: 0, max: 1, step: 0.1, unit: '' },
+  marvin: { style: 'invert', min: 0, max: 100, step: 1, unit: '%' },
+  phobos: { style: 'blur', min: 0, max: 3, step: 0.1, unit: 'px' },
+  heat: { style: 'brightness', min: 1, max: 3, step: 0.1, unit: '' },
+};
+
+const DEFAULT_EFFECT = EFFECTS.none;
 
 const imgPreview = document.querySelector('.img-upload__preview img');
 const effectRadioButtons = document.querySelectorAll('.effects__radio');
@@ -16,7 +17,9 @@ const sliderContainer = document.querySelector('.img-upload__effect-level');
 const sliderElement = document.querySelector('.effect-level__slider');
 const valueElement = document.querySelector('.effect-level__value');
 
-valueElement.value = 100;
+let chosenEffect = DEFAULT_EFFECT;
+
+valueElement.value = DEFAULT_SCALE_VALUE;
 
 const isDefault = () => chosenEffect === DEFAULT_EFFECT;
 
@@ -60,7 +63,7 @@ const onEffectRadioButtonClick = (radioButton) => {
   const currentFilter = `effects__preview--${radioButton.value}`;
   imgPreview.classList.add(currentFilter);
 
-  chosenEffect = EFFECTS.find((effect) => effect.name === radioButton.value);
+  chosenEffect = EFFECTS[radioButton.value];
 
   updateSlider();
 };
